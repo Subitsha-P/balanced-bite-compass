@@ -14,7 +14,150 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      foods: {
+        Row: {
+          allergens: string[]
+          calories: number
+          carbohydrates: number
+          category: string
+          diet_type: string
+          fat: number
+          fiber: number
+          id: string
+          image: string
+          meal_types: string[]
+          name: string
+          protein: number
+          serving_size: string
+          sugar: number
+        }
+        Insert: {
+          allergens?: string[]
+          calories: number
+          carbohydrates: number
+          category: string
+          diet_type: string
+          fat: number
+          fiber?: number
+          id?: string
+          image?: string
+          meal_types?: string[]
+          name: string
+          protein: number
+          serving_size: string
+          sugar?: number
+        }
+        Update: {
+          allergens?: string[]
+          calories?: number
+          carbohydrates?: number
+          category?: string
+          diet_type?: string
+          fat?: number
+          fiber?: number
+          id?: string
+          image?: string
+          meal_types?: string[]
+          name?: string
+          protein?: number
+          serving_size?: string
+          sugar?: number
+        }
+        Relationships: []
+      }
+      meal_plans: {
+        Row: {
+          breakfast: Json
+          created_at: string
+          dinner: Json
+          id: string
+          lunch: Json
+          plan_date: string
+          snack: Json
+          target_calories: number
+          total_calories: number
+          total_carbohydrates: number
+          total_fat: number
+          total_protein: number
+          user_id: string
+        }
+        Insert: {
+          breakfast: Json
+          created_at?: string
+          dinner: Json
+          id?: string
+          lunch: Json
+          plan_date?: string
+          snack: Json
+          target_calories: number
+          total_calories: number
+          total_carbohydrates: number
+          total_fat: number
+          total_protein: number
+          user_id: string
+        }
+        Update: {
+          breakfast?: Json
+          created_at?: string
+          dinner?: Json
+          id?: string
+          lunch?: Json
+          plan_date?: string
+          snack?: Json
+          target_calories?: number
+          total_calories?: number
+          total_carbohydrates?: number
+          total_fat?: number
+          total_protein?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          activity_level: string | null
+          age: number | null
+          allergies: string[]
+          created_at: string
+          diet_type: string | null
+          full_name: string
+          gender: string | null
+          goal: string | null
+          height: number | null
+          updated_at: string
+          user_id: string
+          weight: number | null
+        }
+        Insert: {
+          activity_level?: string | null
+          age?: number | null
+          allergies?: string[]
+          created_at?: string
+          diet_type?: string | null
+          full_name?: string
+          gender?: string | null
+          goal?: string | null
+          height?: number | null
+          updated_at?: string
+          user_id: string
+          weight?: number | null
+        }
+        Update: {
+          activity_level?: string | null
+          age?: number | null
+          allergies?: string[]
+          created_at?: string
+          diet_type?: string | null
+          full_name?: string
+          gender?: string | null
+          goal?: string | null
+          height?: number | null
+          updated_at?: string
+          user_id?: string
+          weight?: number | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
