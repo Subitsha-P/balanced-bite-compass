@@ -12,10 +12,12 @@ import { Logo } from "@/components/app-shell";
 import hero from "@/assets/foods/vegetables.jpg";
 
 export const Route = createFileRoute("/auth")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    mode: s.mode === "signup" ? ("signup" as const) : undefined,
-    redirect: typeof s.redirect === "string" ? s.redirect : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { mode?: "signup"; redirect?: string } => {
+    const o: { mode?: "signup"; redirect?: string } = {};
+    if (s["mode"] === "signup") o.mode = "signup";
+    if (typeof s["redirect"] === "string") o.redirect = s["redirect"];
+    return o;
+  },
   head: () => ({
     meta: [
       { title: "Log in or register – NutriGuide" },
@@ -111,11 +113,11 @@ function AuthPage() {
                 {mode === "signup" ? "Start getting personalised diet recommendations." : "Log in to see your plan."}
               </p>
               <form onSubmit={submit} className="mt-8 space-y-4" noValidate>
-                {mode === "signup" && <Field id="name" label="Full name" value={form.name} onChange={set("name")} error={errors.name} />}
-                <Field id="email" label="Email" type="email" value={form.email} onChange={set("email")} error={errors.email} />
-                <Field id="password" label="Password" type="password" value={form.password} onChange={set("password")} error={errors.password} />
+                {mode === "signup" && <Field id="name" label="Full name" value={form.name} onChange={set("name")} error={errors["name"]} />}
+                <Field id="email" label="Email" type="email" value={form.email} onChange={set("email")} error={errors["email"]} />
+                <Field id="password" label="Password" type="password" value={form.password} onChange={set("password")} error={errors["password"]} />
                 {mode === "signup" && (
-                  <Field id="confirm" label="Confirm password" type="password" value={form.confirm} onChange={set("confirm")} error={errors.confirm} />
+                  <Field id="confirm" label="Confirm password" type="password" value={form.confirm} onChange={set("confirm")} error={errors["confirm"]} />
                 )}
                 <Button type="submit" className="w-full" disabled={busy}>
                   {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
@@ -139,7 +141,7 @@ function AuthPage() {
   );
 }
 
-function Field({ id, label, error, ...rest }: { id: string; label: string; error?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+function Field({ id, label, error, ...rest }: { id: string; label: string; error?: string | undefined } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <div className="space-y-1.5">
       <Label htmlFor={id}>{label}</Label>

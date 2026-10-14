@@ -71,7 +71,7 @@ function ProfilePage() {
     setBusy(true);
     const { error } = await supabase.from("profiles").upsert({ user_id: user!.id, ...parsed.data, updated_at: new Date().toISOString() });
     setBusy(false);
-    if (error) return toast.error("Could not save your profile. Please try again.");
+    if (error) { toast.error("Could not save your profile. Please try again."); return; }
     await qc.invalidateQueries({ queryKey: ["profile"] });
     toast.success("Profile saved — your targets are updated.");
     navigate({ to: "/dashboard" });
@@ -104,7 +104,7 @@ function ProfilePage() {
             <div className="space-y-1.5 sm:col-span-2">
               <Label htmlFor="full_name">Full name</Label>
               <Input id="full_name" value={f.full_name} onChange={(e) => setF({ ...f, full_name: e.target.value })} />
-              {errors.full_name && <p className="text-sm text-destructive">{errors.full_name}</p>}
+              {errors["full_name"] && <p className="text-sm text-destructive">{errors["full_name"]}</p>}
             </div>
             {num("age", "Age (years)")}
             {sel("gender", "Gender", { male: "Male", female: "Female" } satisfies Record<Gender, string>)}

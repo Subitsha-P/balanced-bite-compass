@@ -41,7 +41,7 @@ function Landing() {
             <Button asChild><Link to="/dashboard">Open dashboard</Link></Button>
           ) : (
             <>
-              <Button asChild variant="ghost"><Link to="/auth">Log in</Link></Button>
+              <Button asChild variant="ghost"><Link to="/auth" search={{}}>Log in</Link></Button>
               <Button asChild><Link to="/auth" search={{ mode: "signup" }}>Get started</Link></Button>
             </>
           )}
@@ -62,9 +62,11 @@ function Landing() {
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
-              <Link to={user ? "/dashboard" : "/auth"} search={user ? undefined : { mode: "signup" }}>
-                Build my plan <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
+              {user ? (
+                <Link to="/dashboard">Build my plan <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              ) : (
+                <Link to="/auth" search={{ mode: "signup" }}>Build my plan <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              )}
             </Button>
             <Button asChild size="lg" variant="outline"><a href="#how">How it works</a></Button>
           </div>
