@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      children: {
+        Row: {
+          allergies: string[]
+          birth_date: string
+          created_at: string
+          diet_type: string
+          dislikes: string[]
+          id: string
+          likes: string[]
+          name: string
+          user_id: string
+        }
+        Insert: {
+          allergies?: string[]
+          birth_date: string
+          created_at?: string
+          diet_type?: string
+          dislikes?: string[]
+          id?: string
+          likes?: string[]
+          name: string
+          user_id: string
+        }
+        Update: {
+          allergies?: string[]
+          birth_date?: string
+          created_at?: string
+          diet_type?: string
+          dislikes?: string[]
+          id?: string
+          likes?: string[]
+          name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       foods: {
         Row: {
           allergens: string[]
@@ -123,7 +159,9 @@ export type Database = {
           full_name: string
           gender: string | null
           goal: string | null
+          health_conditions: string[]
           height: number | null
+          liked_recipe_ids: string[]
           updated_at: string
           user_id: string
           weight: number | null
@@ -137,7 +175,9 @@ export type Database = {
           full_name?: string
           gender?: string | null
           goal?: string | null
+          health_conditions?: string[]
           height?: number | null
+          liked_recipe_ids?: string[]
           updated_at?: string
           user_id: string
           weight?: number | null
@@ -151,10 +191,114 @@ export type Database = {
           full_name?: string
           gender?: string | null
           goal?: string | null
+          health_conditions?: string[]
           height?: number | null
+          liked_recipe_ids?: string[]
           updated_at?: string
           user_id?: string
           weight?: number | null
+        }
+        Relationships: []
+      }
+      recipes: {
+        Row: {
+          allergens: string[]
+          audience: string
+          calories: number
+          carbohydrates: number
+          cook_minutes: number
+          course: string
+          description: string
+          diet_type: string
+          fat: number
+          fiber: number
+          flavors: string[]
+          id: string
+          image: string
+          ingredients: string[]
+          key_ingredients: string[]
+          max_age_months: number | null
+          meal_types: string[]
+          min_age_months: number | null
+          name: string
+          prep_minutes: number
+          protein: number
+          region: string
+          serving_size: string
+          servings: number
+          slug: string
+          sodium: number
+          steps: string[]
+          sugar: number
+          suitable_for: string[]
+          texture: string
+          tips: string
+        }
+        Insert: {
+          allergens?: string[]
+          audience?: string
+          calories: number
+          carbohydrates: number
+          cook_minutes?: number
+          course: string
+          description?: string
+          diet_type: string
+          fat: number
+          fiber?: number
+          flavors?: string[]
+          id?: string
+          image?: string
+          ingredients?: string[]
+          key_ingredients?: string[]
+          max_age_months?: number | null
+          meal_types?: string[]
+          min_age_months?: number | null
+          name: string
+          prep_minutes?: number
+          protein: number
+          region: string
+          serving_size: string
+          servings?: number
+          slug: string
+          sodium?: number
+          steps?: string[]
+          sugar?: number
+          suitable_for?: string[]
+          texture?: string
+          tips?: string
+        }
+        Update: {
+          allergens?: string[]
+          audience?: string
+          calories?: number
+          carbohydrates?: number
+          cook_minutes?: number
+          course?: string
+          description?: string
+          diet_type?: string
+          fat?: number
+          fiber?: number
+          flavors?: string[]
+          id?: string
+          image?: string
+          ingredients?: string[]
+          key_ingredients?: string[]
+          max_age_months?: number | null
+          meal_types?: string[]
+          min_age_months?: number | null
+          name?: string
+          prep_minutes?: number
+          protein?: number
+          region?: string
+          serving_size?: string
+          servings?: number
+          slug?: string
+          sodium?: number
+          steps?: string[]
+          sugar?: number
+          suitable_for?: string[]
+          texture?: string
+          tips?: string
         }
         Relationships: []
       }
