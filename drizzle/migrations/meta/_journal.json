@@ -8,6 +8,13 @@
       "when": 1791881326684,
       "tag": "0000_nutriguide_schema",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792487564672,
+      "tag": "0001_recipes_children_conditions",
+      "breakpoints": true
     }
   ]
 }
