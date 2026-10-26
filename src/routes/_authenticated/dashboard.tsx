@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Sparkles, CalendarDays, UserRound } from "lucide-react";
+import { ArrowRight, Sparkles, CalendarDays, UserRound, ChefHat, Baby } from "lucide-react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
@@ -80,12 +80,22 @@ function Dashboard() {
           <Link to="/recommendations" className="group rounded-2xl bg-primary p-6 text-primary-foreground shadow-soft transition hover:-translate-y-0.5">
             <Sparkles className="h-6 w-6" />
             <h3 className="mt-6 font-display text-2xl font-semibold">Your recommendations</h3>
-            <p className="mt-1 text-sm opacity-80">Foods ranked for your goal, diet and allergies.</p>
+            <p className="mt-1 text-sm opacity-80">Basic or custom picks for your goal, diet and health.</p>
           </Link>
           <Link to="/meal-plan" className="group rounded-2xl bg-accent p-6 text-accent-foreground shadow-soft transition hover:-translate-y-0.5">
             <CalendarDays className="h-6 w-6" />
             <h3 className="mt-6 font-display text-2xl font-semibold">Generate a meal plan</h3>
             <p className="mt-1 text-sm opacity-80">A full day built around {c.target} kcal.</p>
+          </Link>
+          <Link to="/recipes" className="group rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-0.5">
+            <ChefHat className="h-6 w-6 text-primary" />
+            <h3 className="mt-6 font-display text-2xl font-semibold">Indian recipes</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Recipes for diabetes, heart, BP, weight loss and grandparents.</p>
+          </Link>
+          <Link to="/baby" className="group rounded-2xl border border-border bg-card p-6 shadow-soft transition hover:-translate-y-0.5">
+            <Baby className="h-6 w-6 text-accent" />
+            <h3 className="mt-6 font-display text-2xl font-semibold">Baby Corner</h3>
+            <p className="mt-1 text-sm text-muted-foreground">Baby food by age and what your child likes.</p>
           </Link>
           <div className="rounded-2xl border border-border bg-card p-6 sm:col-span-2">
             <div className="flex items-center justify-between">

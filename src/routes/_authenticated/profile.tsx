@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CONDITIONS } from "@/lib/recipes";
 import { ACTIVITY_LABELS, ALLERGENS, DIET_LABELS, GOAL_LABELS, calculateAll, type ActivityLevel, type Goal, type Gender } from "@/lib/nutrition";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -31,6 +32,7 @@ const schema = z.object({
   goal: z.enum(["lose", "maintain", "gain"], { message: "Select a goal." }),
   diet_type: z.enum(["vegetarian", "non_vegetarian", "vegan", "eggetarian"], { message: "Select a diet type." }),
   allergies: z.array(z.string()),
+  health_conditions: z.array(z.enum(["obesity", "diabetes", "heart", "hypertension", "senior"])),
 });
 
 function ProfilePage() {
@@ -38,7 +40,7 @@ function ProfilePage() {
   const { data: profile, isLoading } = useProfile();
   const qc = useQueryClient();
   const navigate = useNavigate();
-  const [f, setF] = useState({ full_name: "", age: "", gender: "", height: "", weight: "", activity_level: "", goal: "", diet_type: "", allergies: [] as string[] });
+  const [f, setF] = useState({ full_name: "", age: "", gender: "", height: "", weight: "", activity_level: "", goal: "", diet_type: "", allergies: [] as string[], health_conditions: [] as string[] });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
 
@@ -54,6 +56,7 @@ function ProfilePage() {
         goal: profile.goal ?? "",
         diet_type: profile.diet_type ?? "",
         allergies: profile.allergies ?? [],
+        health_conditions: profile.health_conditions ?? [],
       });
   }, [profile]);
 
@@ -127,6 +130,25 @@ function ProfilePage() {
                 </label>
               ))}
             </div>
+          </div>
+          <div>
+            <Label>Health conditions</Label>
+            <p className="mt-1 text-sm text-muted-foreground">Used to filter and rank dishes — e.g. low sugar for diabetes, low salt for BP, soft food for grandparents.</p>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              {CONDITIONS.map((c) => (
+                <label key={c.value} className="flex cursor-pointer items-start gap-3 rounded-xl border border-border px-3 py-2.5 text-sm has-[:checked]:border-primary has-[:checked]:bg-primary-soft">
+                  <Checkbox
+                    className="mt-0.5"
+                    checked={f.health_conditions.includes(c.value)}
+                    onCheckedChange={(v) => setF({ ...f, health_conditions: v ? [...f.health_conditions, c.value] : f.health_conditions.filter((x) => x !== c.value) })}
+                  />
+                  <span><span className="block font-medium">{c.label}</span><span className="text-xs text-muted-foreground">{c.who}</span></span>
+                </label>
+              ))}
+            </div>
+            {Number(f.age) >= 60 && !f.health_conditions.includes("senior") && (
+              <p className="mt-2 text-sm text-accent-foreground">Tip: tick “Senior / grandparent” for softer, easier-to-digest dishes.</p>
+            )}
           </div>
           <Button type="submit" disabled={busy}>{busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Save profile</Button>
         </form>

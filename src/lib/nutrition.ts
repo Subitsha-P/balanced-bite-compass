@@ -41,6 +41,8 @@ export interface HealthProfile {
   goal: Goal;
   diet_type: DietType;
   allergies: string[];
+  /** Optional health conditions: obesity, diabetes, heart, hypertension, senior. */
+  conditions?: string[];
 }
 
 export const ACTIVITY_FACTORS: Record<ActivityLevel, number> = {
@@ -175,9 +177,16 @@ export function isAllergySafe(food: Pick<Food, "allergens">, allergies: string[]
   return !food.allergens.some((a) => allergies.includes(a));
 }
 
-export function safeFoods(foods: Food[], profile: Pick<HealthProfile, "diet_type" | "allergies">) {
+/** Health-condition hard limits for single foods (diabetes: max 15 g sugar per serving). */
+export function isConditionSafe(food: Pick<Food, "sugar" | "calories">, conditions: string[] = []) {
+  if (conditions.includes("diabetes") && food.sugar > 15) return false;
+  if (conditions.includes("obesity") && food.calories > 500) return false;
+  return true;
+}
+
+export function safeFoods(foods: Food[], profile: Pick<HealthProfile, "diet_type" | "allergies" | "conditions">) {
   return foods.filter(
-    (f) => isDietCompatible(f, profile.diet_type) && isAllergySafe(f, profile.allergies),
+    (f) => isDietCompatible(f, profile.diet_type) && isAllergySafe(f, profile.allergies) && isConditionSafe(f, profile.conditions),
   );
 }
 

@@ -12,12 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedBabyRouteImport } from './routes/_authenticated/baby'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedFoodsRouteImport } from './routes/_authenticated/foods'
 import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticated/history'
 import { Route as AuthenticatedMealPlanRouteImport } from './routes/_authenticated/meal-plan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
+import { Route as AuthenticatedRecipesIndexRouteImport } from './routes/_authenticated/recipes.index'
+import { Route as AuthenticatedRecipesSlugRouteImport } from './routes/_authenticated/recipes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -32,6 +35,11 @@ const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedBabyRoute = AuthenticatedBabyRouteImport.update({
+  id: '/baby',
+  path: '/baby',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
@@ -64,71 +72,101 @@ const AuthenticatedRecommendationsRoute =
     path: '/recommendations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRecipesIndexRoute =
+  AuthenticatedRecipesIndexRouteImport.update({
+    id: '/recipes/',
+    path: '/recipes/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRecipesSlugRoute =
+  AuthenticatedRecipesSlugRouteImport.update({
+    id: '/recipes/$slug',
+    path: '/recipes/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/baby': typeof AuthenticatedBabyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/foods': typeof AuthenticatedFoodsRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/meal-plan': typeof AuthenticatedMealPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/recipes/$slug': typeof AuthenticatedRecipesSlugRoute
+  '/recipes/': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/baby': typeof AuthenticatedBabyRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/foods': typeof AuthenticatedFoodsRoute
   '/history': typeof AuthenticatedHistoryRoute
   '/meal-plan': typeof AuthenticatedMealPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/recipes/$slug': typeof AuthenticatedRecipesSlugRoute
+  '/recipes': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/_authenticated/baby': typeof AuthenticatedBabyRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/foods': typeof AuthenticatedFoodsRoute
   '/_authenticated/history': typeof AuthenticatedHistoryRoute
   '/_authenticated/meal-plan': typeof AuthenticatedMealPlanRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/_authenticated/recipes/$slug': typeof AuthenticatedRecipesSlugRoute
+  '/_authenticated/recipes/': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/auth'
+    | '/baby'
     | '/dashboard'
     | '/foods'
     | '/history'
     | '/meal-plan'
     | '/profile'
     | '/recommendations'
+    | '/recipes/$slug'
+    | '/recipes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/baby'
     | '/dashboard'
     | '/foods'
     | '/history'
     | '/meal-plan'
     | '/profile'
     | '/recommendations'
+    | '/recipes/$slug'
+    | '/recipes'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/_authenticated/baby'
     | '/_authenticated/dashboard'
     | '/_authenticated/foods'
     | '/_authenticated/history'
     | '/_authenticated/meal-plan'
     | '/_authenticated/profile'
     | '/_authenticated/recommendations'
+    | '/_authenticated/recipes/$slug'
+    | '/_authenticated/recipes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -159,6 +197,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/baby': {
+      id: '/_authenticated/baby'
+      path: '/baby'
+      fullPath: '/baby'
+      preLoaderRoute: typeof AuthenticatedBabyRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
@@ -202,25 +247,45 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecommendationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recipes/': {
+      id: '/_authenticated/recipes/'
+      path: '/recipes'
+      fullPath: '/recipes/'
+      preLoaderRoute: typeof AuthenticatedRecipesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/recipes/$slug': {
+      id: '/_authenticated/recipes/$slug'
+      path: '/recipes/$slug'
+      fullPath: '/recipes/$slug'
+      preLoaderRoute: typeof AuthenticatedRecipesSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedBabyRoute: typeof AuthenticatedBabyRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedFoodsRoute: typeof AuthenticatedFoodsRoute
   AuthenticatedHistoryRoute: typeof AuthenticatedHistoryRoute
   AuthenticatedMealPlanRoute: typeof AuthenticatedMealPlanRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRecommendationsRoute: typeof AuthenticatedRecommendationsRoute
+  AuthenticatedRecipesSlugRoute: typeof AuthenticatedRecipesSlugRoute
+  AuthenticatedRecipesIndexRoute: typeof AuthenticatedRecipesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedBabyRoute: AuthenticatedBabyRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedFoodsRoute: AuthenticatedFoodsRoute,
   AuthenticatedHistoryRoute: AuthenticatedHistoryRoute,
   AuthenticatedMealPlanRoute: AuthenticatedMealPlanRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRecommendationsRoute: AuthenticatedRecommendationsRoute,
+  AuthenticatedRecipesSlugRoute: AuthenticatedRecipesSlugRoute,
+  AuthenticatedRecipesIndexRoute: AuthenticatedRecipesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

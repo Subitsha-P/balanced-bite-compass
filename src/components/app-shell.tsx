@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState, type ReactNode } from "react";
-import { LayoutDashboard, UserRound, Apple, Sparkles, CalendarDays, History, LogOut, Leaf, Menu, X } from "lucide-react";
+import { LayoutDashboard, UserRound, Apple, Sparkles, CalendarDays, History, LogOut, Leaf, Menu, X, ChefHat, Baby } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useProfile } from "@/hooks/use-profile";
 import { Button } from "@/components/ui/button";
@@ -10,9 +10,11 @@ const NAV = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/profile", label: "Health Profile", icon: UserRound },
   { to: "/foods", label: "Food Database", icon: Apple },
+  { to: "/recipes", label: "Indian Recipes", icon: ChefHat },
   { to: "/recommendations", label: "Recommendations", icon: Sparkles },
   { to: "/meal-plan", label: "Meal Planner", icon: CalendarDays },
   { to: "/history", label: "Saved Plans", icon: History },
+  { to: "/baby", label: "Baby Corner", icon: Baby },
 ] as const;
 
 export function Logo() {
