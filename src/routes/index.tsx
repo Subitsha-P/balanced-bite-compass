@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Activity, ShieldCheck, Sparkles, CalendarDays, Calculator, Database, ArrowRight } from "lucide-react";
+import { Activity, ShieldCheck, Sparkles, CalendarDays, Calculator, Database, ArrowRight, ChefHat, HeartPulse, Baby } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/app-shell";
 import { useAuth } from "@/hooks/use-auth";
@@ -28,6 +28,9 @@ const FEATURES = [
   { icon: CalendarDays, title: "Meal planning", text: "Balanced breakfast, lunch, snack and dinner built to hit your daily calorie target." },
   { icon: Database, title: "130+ foods", text: "Indian dishes, grains, produce, proteins and snacks with full macro data." },
   { icon: Activity, title: "Progress history", text: "Save plans and look back at your targets and macros over time." },
+  { icon: ChefHat, title: "Indian recipe library", text: "Regional dishes from every corner of India with ingredients, step-by-step method and nutrition. Basic or Custom picks learned from dishes you like." },
+  { icon: HeartPulse, title: "For every health need", text: "Rules for obesity, diabetes, heart disease, high blood pressure and senior-friendly soft food for grandparents." },
+  { icon: Baby, title: "Baby Corner", text: "Age-staged baby food from 6 months to 5 years, ranked by what your child likes, with safety guidance." },
 ];
 
 function Landing() {
