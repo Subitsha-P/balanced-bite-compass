@@ -18,6 +18,8 @@ import { Route as AuthenticatedHistoryRouteImport } from './routes/_authenticate
 import { Route as AuthenticatedMealPlanRouteImport } from './routes/_authenticated/meal-plan'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedRecommendationsRouteImport } from './routes/_authenticated/recommendations'
+import { Route as AuthenticatedRecipesIndexRouteImport } from './routes/_authenticated/recipes.index'
+import { Route as AuthenticatedRecipesSlugRouteImport } from './routes/_authenticated/recipes.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +66,18 @@ const AuthenticatedRecommendationsRoute =
     path: '/recommendations',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedRecipesIndexRoute =
+  AuthenticatedRecipesIndexRouteImport.update({
+    id: '/recipes/',
+    path: '/recipes/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedRecipesSlugRoute =
+  AuthenticatedRecipesSlugRouteImport.update({
+    id: '/recipes/$slug',
+    path: '/recipes/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +88,8 @@ export interface FileRoutesByFullPath {
   '/meal-plan': typeof AuthenticatedMealPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/recipes/$slug': typeof AuthenticatedRecipesSlugRoute
+  '/recipes/': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -84,6 +100,8 @@ export interface FileRoutesByTo {
   '/meal-plan': typeof AuthenticatedMealPlanRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/recipes/$slug': typeof AuthenticatedRecipesSlugRoute
+  '/recipes': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -96,6 +114,8 @@ export interface FileRoutesById {
   '/_authenticated/meal-plan': typeof AuthenticatedMealPlanRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/recommendations': typeof AuthenticatedRecommendationsRoute
+  '/_authenticated/recipes/$slug': typeof AuthenticatedRecipesSlugRoute
+  '/_authenticated/recipes/': typeof AuthenticatedRecipesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,6 +128,8 @@ export interface FileRouteTypes {
     | '/meal-plan'
     | '/profile'
     | '/recommendations'
+    | '/recipes/$slug'
+    | '/recipes/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,6 +140,8 @@ export interface FileRouteTypes {
     | '/meal-plan'
     | '/profile'
     | '/recommendations'
+    | '/recipes/$slug'
+    | '/recipes'
   id:
     | '__root__'
     | '/'
@@ -129,6 +153,8 @@ export interface FileRouteTypes {
     | '/_authenticated/meal-plan'
     | '/_authenticated/profile'
     | '/_authenticated/recommendations'
+    | '/_authenticated/recipes/$slug'
+    | '/_authenticated/recipes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -202,6 +228,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRecommendationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/recipes/': {
+      id: '/_authenticated/recipes/'
+      path: '/recipes'
+      fullPath: '/recipes/'
+      preLoaderRoute: typeof AuthenticatedRecipesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/recipes/$slug': {
+      id: '/_authenticated/recipes/$slug'
+      path: '/recipes/$slug'
+      fullPath: '/recipes/$slug'
+      preLoaderRoute: typeof AuthenticatedRecipesSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
@@ -212,6 +252,8 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedMealPlanRoute: typeof AuthenticatedMealPlanRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedRecommendationsRoute: typeof AuthenticatedRecommendationsRoute
+  AuthenticatedRecipesSlugRoute: typeof AuthenticatedRecipesSlugRoute
+  AuthenticatedRecipesIndexRoute: typeof AuthenticatedRecipesIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -221,6 +263,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedMealPlanRoute: AuthenticatedMealPlanRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedRecommendationsRoute: AuthenticatedRecommendationsRoute,
+  AuthenticatedRecipesSlugRoute: AuthenticatedRecipesSlugRoute,
+  AuthenticatedRecipesIndexRoute: AuthenticatedRecipesIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
