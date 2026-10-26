@@ -9,6 +9,7 @@ import {
   type Food,
   type HealthProfile,
 } from "./nutrition";
+import { ageInMonths, normalizeRecipe, recommendBabyRecipes, recommendRecipes, type Recipe } from "./recipes";
 
 /* Helpers ------------------------------------------------------------ */
 
@@ -32,6 +33,7 @@ async function loadProfileAndFoods({ supabase, userId }: Ctx) {
     goal: profile.goal,
     diet_type: profile.diet_type,
     allergies: profile.allergies ?? [],
+    conditions: profile.health_conditions ?? [],
   };
   const list: Food[] = (foods ?? []).map((f: any) => ({
     ...f,
@@ -42,7 +44,15 @@ async function loadProfileAndFoods({ supabase, userId }: Ctx) {
     fiber: Number(f.fiber),
     sugar: Number(f.sugar),
   }));
-  return { profile: p, foods: list, calc: calculateAll(p) };
+  return { profile: p, foods: list, calc: calculateAll(p), likedRecipeIds: (profile.liked_recipe_ids ?? []) as string[] };
+}
+
+async function loadRecipes(supabase: any, audience?: "adult" | "baby"): Promise<Recipe[]> {
+  let q = supabase.from("recipes").select("*");
+  if (audience) q = q.eq("audience", audience);
+  const { data, error } = await q;
+  if (error) throw new Error("Could not load recipes. Please try again.");
+  return (data ?? []).map(normalizeRecipe);
 }
 
 /* Recommendations ---------------------------------------------------- */
@@ -132,4 +142,60 @@ export const saveMealPlan = createServerFn({ method: "POST" })
       .single();
     if (error) throw new Error("Could not save the meal plan. Please try again.");
     return { id: row.id as string };
+  });
+
+/* Recipe recommendations (basic / custom) ---------------------------- */
+
+export const getRecipeRecommendations = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { mode: "basic" | "custom" }) =>
+    z.object({ mode: z.enum(["basic", "custom"]) }).parse(input),
+  )
+  .handler(async ({ data, context }) => {
+    const ctx = context as Ctx;
+    const [{ profile, calc, likedRecipeIds }, recipes] = await Promise.all([
+      loadProfileAndFoods(ctx),
+      loadRecipes(ctx.supabase, "adult"),
+    ]);
+    const res = recommendRecipes(
+      recipes,
+      { goal: profile.goal, diet_type: profile.diet_type, allergies: profile.allergies, conditions: profile.conditions ?? [], target: calc.target },
+      data.mode,
+      likedRecipeIds,
+    );
+    return {
+      mode: data.mode,
+      calc,
+      profile,
+      totalRecipes: recipes.length,
+      needsLikes: res.needsLikes,
+      liked: res.liked.map((r) => ({ id: r.id, slug: r.slug, name: r.name })),
+      items: res.items.slice(0, 60),
+      excluded: res.excluded.map((e) => ({ id: e.recipe.id, slug: e.recipe.slug, name: e.recipe.name, reasons: e.reasons })),
+    };
+  });
+
+/* Baby Corner -------------------------------------------------------- */
+
+export const getBabyRecommendations = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { childId: string }) => z.object({ childId: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    const { supabase } = context as Ctx;
+    const { data: child, error } = await supabase.from("children").select("*").eq("id", data.childId).maybeSingle();
+    if (error) throw new Error("Could not load the child profile.");
+    if (!child) throw new Error("Child profile not found.");
+    const recipes = await loadRecipes(supabase);
+    const months = ageInMonths(child.birth_date);
+    const res = recommendBabyRecipes(
+      recipes,
+      { diet_type: child.diet_type, allergies: child.allergies ?? [], likes: child.likes ?? [], dislikes: child.dislikes ?? [] },
+      months,
+    );
+    return {
+      months,
+      stage: res.stage,
+      picks: res.picks.slice(0, 30),
+      excluded: res.excluded.map((e) => ({ id: e.recipe.id, slug: e.recipe.slug, name: e.recipe.name, reasons: e.reasons })),
+    };
   });
