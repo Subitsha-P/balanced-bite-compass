@@ -33,7 +33,7 @@ async function loadProfileAndFoods({ supabase, userId }: Ctx) {
     goal: profile.goal,
     diet_type: profile.diet_type,
     allergies: profile.allergies ?? [],
-    conditions: profile.health_conditions ?? [],
+    conditions: ((profile as any).health_conditions ?? []) as string[],
   };
   const list: Food[] = (foods ?? []).map((f: any) => ({
     ...f,
@@ -44,7 +44,7 @@ async function loadProfileAndFoods({ supabase, userId }: Ctx) {
     fiber: Number(f.fiber),
     sugar: Number(f.sugar),
   }));
-  return { profile: p, foods: list, calc: calculateAll(p), likedRecipeIds: (profile.liked_recipe_ids ?? []) as string[] };
+  return { profile: p, foods: list, calc: calculateAll(p), likedRecipeIds: ((profile as any).liked_recipe_ids ?? []) as string[] };
 }
 
 async function loadRecipes(supabase: any, audience?: "adult" | "baby"): Promise<Recipe[]> {

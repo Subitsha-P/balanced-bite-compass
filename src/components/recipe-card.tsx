@@ -39,8 +39,8 @@ export function LikeButton({ liked, onClick, disabled }: { liked: boolean; onCli
 
 export function RecipeCard({ recipe, liked, onLike, top, footer }: {
   recipe: Recipe;
-  liked?: boolean;
-  onLike?: () => void;
+  liked?: boolean | undefined;
+  onLike?: (() => void) | undefined;
   top?: ReactNode;
   footer?: ReactNode;
 }) {
